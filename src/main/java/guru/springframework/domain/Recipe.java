@@ -29,6 +29,9 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    private UnitOfMeasure unit;
+
     public Long getId() {
         return id;
     }
@@ -107,5 +110,21 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public UnitOfMeasure getUnit() {
+        return unit;
+    }
+
+    public void setUnit(UnitOfMeasure unit) {
+        this.unit = unit;
     }
 }
