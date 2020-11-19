@@ -32,6 +32,9 @@ public class Recipe {
     @OneToOne(fetch = FetchType.EAGER)
     private UnitOfMeasure unit;
 
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
+
     public Long getId() {
         return id;
     }
