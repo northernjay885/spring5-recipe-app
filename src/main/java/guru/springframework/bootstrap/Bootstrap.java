@@ -4,6 +4,7 @@ import guru.springframework.domain.*;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
@@ -11,11 +12,12 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 
-
+@Slf4j
 @Component
 public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -30,6 +32,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         LoadData();
     }
@@ -114,6 +117,8 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
             throw new RuntimeException("no category exists");
         }
 
+        log.debug("categories and unit of measures loaded!");
+
         System.out.println("create perfect guacamole recipe");
 
         Recipe perfectGuacamole = new Recipe();
@@ -144,6 +149,8 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         Notes notePG = new Notes();
         notePG.setRecipeNotes(" ");
         perfectGuacamole.setNotes(notePG);
+
+        log.debug("Everything for perfect guacamole loaded except ingredients for it!");
 
         System.out.println("add ingredients of perfect guacamole");
 
@@ -213,7 +220,11 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         ingredientsPG.add(radishPG);
         ingredientsPG.add(chipsPG);
 
+        log.debug("Ingredients for perfect guacamole loaded!");
+
         recipeRepository.save(perfectGuacamole);
+
+        log.debug("recipe for perfect guacamole saved!");
 
         System.out.println("create spicy grilled chicken recipe");
 
@@ -243,6 +254,8 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         Notes noteSGC = new Notes();
         noteSGC.setRecipeNotes(" ");
         spicyGrilledChicken.setNotes(noteSGC);
+
+        log.debug("Everything for spicy grilled chicken loaded except ingredients for it!");
 
         Ingredient anchoChiliPowderSGC = new Ingredient();
         anchoChiliPowderSGC.setDescription("ancho chili powder");
@@ -314,7 +327,11 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         ingredientsSGC.add(oliveOilSGC);
         ingredientsSGC.add(chickenThighSGC);
 
+        log.debug("Ingredients for perfect guacamole loaded!");
+
         recipeRepository.save(spicyGrilledChicken);
+
+        log.debug("recipe for spicy grilled chicken saved!");
 
 
     }
