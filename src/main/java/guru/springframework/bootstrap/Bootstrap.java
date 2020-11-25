@@ -52,27 +52,30 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         Optional<UnitOfMeasure> UOMPinchOpt = unitOfMeasureRepository.findByDescription("Pinch");
         Optional<UnitOfMeasure> UOMOunceOpt = unitOfMeasureRepository.findByDescription("Ounce");
 
-        //get category
+        //get category]
+        Category americanCategory;
         if (americanCategoryOpt.isPresent()) {
-            Category americanCategory = americanCategoryOpt.get();
+            americanCategory = americanCategoryOpt.get();
         } else {
             throw new RuntimeException("no category exists");
         }
-
+        Category italianCategory;
         if (italianCategoryOpt.isPresent()) {
-            Category italianCategory = italianCategoryOpt.get();
+            italianCategory = italianCategoryOpt.get();
         } else {
             throw new RuntimeException("no category exists");
         }
 
+        Category mexicanCategory;
         if (mexicanCategoryOpt.isPresent()) {
-            Category americanCategory = mexicanCategoryOpt.get();
+            mexicanCategory = mexicanCategoryOpt.get();
         } else {
             throw new RuntimeException("no category exists");
         }
 
+        Category fastFoodCategory;
         if (fastFoodCategoryOpt.isPresent()) {
-            Category americanCategory = fastFoodCategoryOpt.get();
+            fastFoodCategory = fastFoodCategoryOpt.get();
         } else {
             throw new RuntimeException("no category exists");
         }
@@ -146,8 +149,10 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
                 + "4 Serve: Serve immediately, or if making a few hours ahead, place plastic wrap on the surface of the guacamole and press down to " +
                 "cover it and to prevent air reaching it. (The oxygen in the air causes oxidation which will turn the guacamole brown.) Refrigerate until ready to serve.");
         perfectGuacamole.setDifficulty(Difficulty.MODERATE);
+        perfectGuacamole.getCategories().add(americanCategory);
+        perfectGuacamole.getCategories().add(mexicanCategory);
         Notes notePG = new Notes();
-        notePG.setRecipeNotes(" ");
+        notePG.setRecipeNotes("This a note for perfect Guacamole");
         perfectGuacamole.setNotes(notePG);
 
         log.debug("Everything for perfect guacamole loaded except ingredients for it!");
@@ -157,6 +162,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         Ingredient avocadoPG = new Ingredient();
         avocadoPG.setDescription("avocado");
         avocadoPG.setAmount(BigDecimal.valueOf(2));
+        avocadoPG.setUom(UOMDash);
         avocadoPG.setRecipe(perfectGuacamole);
 
         Ingredient saltPG = new Ingredient();
@@ -180,6 +186,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         Ingredient serranoChilePG = new Ingredient();
         serranoChilePG.setDescription("serrano chile");
         serranoChilePG.setAmount(BigDecimal.valueOf(2));
+        serranoChilePG.setUom(UOMDash);
         serranoChilePG.setRecipe(perfectGuacamole);
 
         Ingredient cilantroPG = new Ingredient();
@@ -197,14 +204,19 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         Ingredient tomatoPG = new Ingredient();
         tomatoPG.setDescription("tomato");
         tomatoPG.setAmount(BigDecimal.valueOf(1/2));
+        tomatoPG.setUom(UOMDash);
         tomatoPG.setRecipe(perfectGuacamole);
 
         Ingredient radishPG = new Ingredient();
         radishPG.setDescription("red radish or jicama");
+        radishPG.setAmount(BigDecimal.valueOf(1/2));
+        radishPG.setUom(UOMDash);
         radishPG.setRecipe(perfectGuacamole);
 
         Ingredient chipsPG = new Ingredient();
         chipsPG.setDescription("Tortilla chips");
+        chipsPG.setAmount(BigDecimal.valueOf(1/2));
+        chipsPG.setUom(UOMDash);
         chipsPG.setRecipe(perfectGuacamole);
 
         System.out.println("add ingredients to perfect guacamole");
@@ -251,8 +263,10 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
                 "\n" +
                 "5 Assemble the tacos: Slice the chicken into strips. On each tortilla, place a small handful of arugula. Top with chicken slices, sliced avocado, radishes, tomatoes, and onion slices. Drizzle with the thinned sour cream. Serve with lime wedges.");
         spicyGrilledChicken.setDifficulty(Difficulty.HARD);
+        spicyGrilledChicken.getCategories().add(americanCategory);
+        spicyGrilledChicken.getCategories().add(fastFoodCategory);
         Notes noteSGC = new Notes();
-        noteSGC.setRecipeNotes(" ");
+        noteSGC.setRecipeNotes("This is a note for spicy grilled chicken");
         spicyGrilledChicken.setNotes(noteSGC);
 
         log.debug("Everything for spicy grilled chicken loaded except ingredients for it!");
@@ -290,6 +304,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         Ingredient cloveGarlicSGC = new Ingredient();
         cloveGarlicSGC.setDescription("clover garlic");
         cloveGarlicSGC.setAmount(BigDecimal.valueOf(1));
+        cloveGarlicSGC.setUom(UOMDash);
         cloveGarlicSGC.setRecipe(spicyGrilledChicken);
 
         Ingredient orangeZestSGC = new Ingredient();
@@ -313,6 +328,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         Ingredient chickenThighSGC = new Ingredient();
         chickenThighSGC.setDescription("boneless chicken thigh");
         chickenThighSGC.setAmount(BigDecimal.valueOf(5));
+        chickenThighSGC.setUom(UOMDash);
         chickenThighSGC.setRecipe(spicyGrilledChicken);
 
         System.out.println("add ingredients to spicy grilled chicken");
