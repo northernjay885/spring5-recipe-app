@@ -20,6 +20,7 @@ public class RecipeCommand {
     private Integer cookTime;
     private String source;
     private String url;
+    private Integer Servings;
 
     private String directions;
     private Byte[] images;

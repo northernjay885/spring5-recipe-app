@@ -1,6 +1,7 @@
 package guru.springframework.services;
 
 
+import guru.springframework.commands.RecipeCommand;
 import guru.springframework.domain.Recipe;
 import java.util.Set;
 
@@ -9,5 +10,7 @@ public interface DisplayRecipeService {
     Set<Recipe> getRecipes();
 
     Recipe getRecipeByID(Long id);
+
+    RecipeCommand saveRecipeCommand(RecipeCommand command);
 
 }
