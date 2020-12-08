@@ -55,4 +55,19 @@ public class DisplayRecipeServiceImpl implements DisplayRecipeService {
         log.debug("Saved Recipe Id:" + savedRecipe.getId());
         return recipeToRecipeCommand.convert(savedRecipe);
     }
+
+    @Transactional
+    @Override
+    public RecipeCommand findCommandById(Long id) {
+        if (recipeRepository.findById(id).isPresent()) {
+            return recipeToRecipeCommand.convert(recipeRepository.findById(id).get());
+        }
+        return null;
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long id) {
+        recipeRepository.deleteById(id);
+    }
 }
