@@ -11,6 +11,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -39,7 +41,7 @@ public class IngredientControllerTest {
     }
 
     @Test
-    public void listIngredient() throws Exception{
+    public void listIngredient() throws Exception {
         //given
         RecipeCommand recipeCommand = new RecipeCommand();
         when(displayRecipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
@@ -52,5 +54,20 @@ public class IngredientControllerTest {
 
         //then
         verify(displayRecipeService, times(1)).findCommandById(anyLong());
+    }
+
+    @Test
+    public void testShowIngredient() throws Exception {
+        //given
+        IngredientCommand ingredientCommand = new IngredientCommand();
+
+        //when
+        when(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(ingredientCommand);
+
+        //then
+        mockMvc.perform(get("/recipe/1/ingredient/2/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/show"))
+                .andExpect(model().attributeExists("ingredient"));
     }
 }
