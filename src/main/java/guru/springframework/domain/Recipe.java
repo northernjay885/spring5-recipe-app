@@ -59,4 +59,10 @@ public class Recipe {
         return ingredients;
     }
 
+    public Recipe addIngredient(Ingredient ingredient) {
+        ingredients.add(ingredient);
+        ingredient.setRecipe(this);
+        return this;
+    }
+
 }
