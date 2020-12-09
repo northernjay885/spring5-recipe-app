@@ -53,6 +53,29 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    public void deleteByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
+        Recipe recipe;
+        if (recipeRepository.findById(recipeId).isPresent()){
+            recipe = recipeRepository.findById(recipeId).get();
+        } else {
+            throw new NoSuchElementException("No such recipe");
+        }
+
+        Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                .findFirst();
+        if (!ingredientOptional.isPresent()) {
+            throw new NoSuchElementException("No such ingredient");
+        } else {
+            Ingredient ingredientToDelete = ingredientOptional.get();
+            recipe.getIngredients().remove(ingredientToDelete);
+            ingredientToDelete.setRecipe(null);
+            recipeRepository.save(recipe);
+        }
+
+    }
+
+    @Override
     public IngredientCommand saveIngredientCommand(IngredientCommand command) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId());
 
@@ -83,12 +106,25 @@ public class IngredientServiceImpl implements IngredientService {
 
             Recipe savedRecipe = recipeRepository.save(recipe);
 
+            Optional<Ingredient> savedIngredientOptional =  savedRecipe.getIngredients().stream()
+            .filter(ingredient -> ingredient.getId().equals(command.getId())).findFirst();
+
+            //check by description
+            if (!savedIngredientOptional.isPresent()) {
+                //not totally safe... But best guess
+                savedIngredientOptional = savedRecipe.getIngredients().stream()
+                        .filter(recipeIngredients -> recipeIngredients.getDescription().equals(command.getDescription()))
+                        .filter(recipeIngredients -> recipeIngredients.getAmount().equals(command.getAmount()))
+                        .filter(recipeIngredients -> recipeIngredients.getUom().getId().equals(command.getUom().getId()))
+                        .findFirst();
+            }
+
             //todo check for fail
-            return ingredientToIngredientCommand.convert(savedRecipe.getIngredients().stream()
-            .filter(ingredient -> ingredient.getId().equals(command.getId()))
-                    .findFirst()
-                    .get());
+            return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
+
         }
+
+
 
     }
 }

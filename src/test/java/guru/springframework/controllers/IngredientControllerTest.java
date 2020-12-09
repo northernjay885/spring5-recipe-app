@@ -116,4 +116,26 @@ public class IngredientControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/2/ingredient/1/show"));
     }
+
+    @Test
+    public void addRecipeIngredient() throws Exception {
+        //given
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(1L);
+
+        //when
+        when(displayRecipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+
+        //then
+        mockMvc.perform(get("/recipe/1/ingredient/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/ingredientform"));
+
+
+    }
+
+    @Test
+    public void deleteRecipeIngredient() throws Exception {
+
+    }
 }
