@@ -72,6 +72,5 @@ public class DisplayRecipeServiceImplTest {
 
         Recipe recipeReturned = displayRecipeService.getRecipeByID(1L);
 
-        // should go boom
     }
 }

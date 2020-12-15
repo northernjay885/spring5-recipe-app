@@ -8,8 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Slf4j
 @Controller
@@ -34,7 +37,15 @@ public class RecipeController {
     }
 
     @PostMapping("recipe")
-    public String savedOrUpdate(@ModelAttribute RecipeCommand command) {
+    public String savedOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult result) {
+
+        if (result.hasErrors()) {
+            result.getAllErrors().forEach(objectError -> {
+                log.debug(objectError.toString());
+            });
+            return "recipe/recipeform";
+        }
+
         RecipeCommand savedCommand = displayRecipeService.saveRecipeCommand(command);
 
         return "redirect:/recipe/" + savedCommand.getId() + "/show";
@@ -70,19 +81,7 @@ public class RecipeController {
         return modelAndView;
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NumberFormatException.class)
-    public ModelAndView handleNumberFormat(Exception exception) {
 
-        log.error("Handling number format exception");
-        log.error(exception.getMessage());
-        ModelAndView modelAndView = new ModelAndView();
-
-        modelAndView.setViewName("numberFormatError");
-        modelAndView.addObject("exception", exception);
-
-        return modelAndView;
-    }
 
 
 
