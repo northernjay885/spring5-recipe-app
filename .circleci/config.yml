@@ -7,7 +7,7 @@ jobs:
   sendToCodecov:
     executor: maven/default
     steps:
-      -run: bash <(curl -s https://codecov.io/bash)
+      - run: bash <(curl -s https://codecov.io/bash)
 
 workflows:
   maven_test:
