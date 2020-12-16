@@ -3,17 +3,11 @@ version: 2.1
 orbs:
   maven: circleci/maven@1.0.3
 
-jobs:
-  sendToCodeCov:
-    steps:
-      - run: bash <(curl -s https://codecov.io/bash)
-
-
 workflows:
   maven_test:
     jobs:
       - maven/test:
           command: 'integration-test cobertura:cobertura'
-      - sendToCodeCov:
-          requires:
-            - maven/test
+    commands:
+      - with_cache:
+          steps: bash <(curl -s https://codecov.io/bash)
